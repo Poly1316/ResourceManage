@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.dao.ServiceMapper">
+  <resultMap id="BaseResultMap" type="cn.org.entity.Service">
+    <id column="id" property="id" />
+    <result column="ip" property="ip" />
+    <result column="project" property="project" />
+    <result column="status" property="status" />
+    <result column="username" property="username" />
+    <result column="password" property="password" />
+    <result column="role" property="role" />
+    <result column="system_version" property="system_version" />
+    <result column="cpu" property="cpu" />
+    <result column="memory" property="memory" />
+    <result column="disk" property="disk"/>
+    <result column="remark" property="remark" />
+  </resultMap>
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT s.id,s.ip,s.project,s.status,s.username,s.password,s.role,s.system_version,s.cpu,s.memory,s.disk,s.remark FROM service s
+    <where>
+      <if test="ip != null and ip != ''">
+        ip=#{ip}
+      </if>
+      <if test="project != null and project != ''">
+        and project=#{project}
+      </if>
+      <if test="status != null and status != '' and status !=0">
+        and status=#{status}
+      </if>
+    </where>
+    ORDER BY s.project LIMIT #{page},#{size}
+  </select>
+
+  <select id="exportAll" resultMap="BaseResultMap">
+    SELECT s.id,s.ip,s.project,s.status,s.username,s.password,s.role,s.system_version,s.cpu,s.memory,s.disk,s.remark FROM service s
+    ORDER BY s.project
+  </select>
+
+  <select id="getMaxId" resultType="Long">
+    SELECT max(id)+1 FROM service
+  </select>
+
+  <select id="getTotal" resultType="Long">
+    SELECT count(*) FROM service
+    <where>
+      <if test="ip != null and ip != ''">
+        ip=#{ip}
+      </if>
+      <if test="project != null and project != ''">
+        and project=#{project}
+      </if>
+      <if test="status != null and status != '' and status !=0">
+        and status=#{status}
+      </if>
+    </where>
+  </select>
+
+  <insert id="addService">
+    INSERT INTO service(id,ip,project,status,username,password,role,system_version,cpu,memory,disk,remark)
+    VALUES(#{id},#{ip},#{project},#{status},#{username},#{password},#{role},#{system_version},#{cpu},#{memory},#{disk},#{remark})
+  </insert>
+
+  <update id="updateService">
+    UPDATE service set ip=#{ip},project=#{project},status=#{status},username=#{username},password=#{password},role=#{role},
+    system_version=#{system_version},cpu=#{cpu},memory=#{memory},disk=#{disk},remark=#{remark}
+    WHERE id=#{id}
+  </update>
+
+  <delete id="delService">
+    DELETE FROM service WHERE id = #{id}
+  </delete>
+
+  <delete id="delMoreServiceById">
+    DELETE FROM service
+    <choose>
+      <when test="ids!=null and ids.length>0">
+        <where>
+          <foreach collection="ids" item="id" separator="or">
+            id=#{id}
+          </foreach>
+        </where>
+      </when>
+      <otherwise>
+        where 1=2
+      </otherwise>
+    </choose>
+  </delete>
+</mapper>

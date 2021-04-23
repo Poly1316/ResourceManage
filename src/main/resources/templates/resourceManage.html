@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>服务器管理</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/getform.js"></script>
+    <script type="text/javascript" src="/js/jquery.serializeJSON.min.js"></script>
+    <script type="text/javascript" src="/plugins/layui-v2.5.6/layui.js"></script>
+    <script type="text/javascript" src="/plugins/layui-v2.5.6/lay/modules/laypage.js"></script>
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/frame/layui/css/layui.css">
+    <link rel="stylesheet" href="/frame/static/css/style.css">
+</head>
+<body role="document">
+<!--环境搜索栏-->
+<div class="page-header" >
+    <div class="navbar-form">
+        <div class="form-group">
+            <form id="service_search">
+                <label for="ip_search">IP地址：</label><input id="ip_search" name="deal_type" class="form-control">
+                <label for="project_search">所属项目：</label><input id="project_search" name="project" type="text" class="form-control">
+                <label for="status_search">状态：</label>
+                <select id="status_search" class="form-control" name="status">
+                    <option value="0">全部</option>
+                    <option value="1">在用</option>
+                    <option value="2">空闲</option>
+                    <option value="3">故障</option>
+                    <option value="4">已预订，待安装</option>
+                </select>
+            </form>
+        </div>
+        <button onclick="search(1)" type="button" class="btn btn-success radius" id="search" name="search">搜索</button>
+        <button onclick="reset()" type="button" class="btn radius" id="reset" name="reset">重置</button>
+    </div>
+</div>
+<!--警告框-->
+<div id="myAlert" class="alert alert-warning" style="display: none">
+    <strong>警告！</strong>编辑时只能勾选一条。
+</div>
+<div id="myAlert1" class="alert alert-warning" style="display: none">
+    <strong>警告！</strong>删除时一定要勾选一条。
+</div>
+<!--按钮-->
+<div class="btn-toolbar" role="toolbar">
+    <div class="btn-group">
+        <button id="btn1" class="btn layui-btn"  data-toggle="modal" data-target="#addMyModal">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+        </button>
+        <button id="btn2" class="btn layui-btn"  data-toggle="modal" data-target="#">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改
+        </button>
+        <button id="btn3" type="button" class="btn layui-btn" onclick="delete_record()">
+            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>删除
+        </button>
+        <button id="btn-export" type="button" class="btn layui-btn" onclick="record_export()">导出</button>
+    </div>
+</div>
+<!--服务器列表-->
+<div>
+    <div>
+        <table id="table" class="table table-striped">
+            <thead>
+            <th><input type="checkbox" id="allcheck"  onclick="demo()" /></th><th style="display: none">id</th><th>IP地址</th><th>所属项目</th><th>状态</th><th>用户名</th><th>密码</th><th>角色</th><th>系统版本</th><th>CPU</th><th>内存</th><th>磁盘</th><th style="display: none">备注</th>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+        <div id="pageNav" class="pageNav"
+             style="clear: both; align-items: center; display: -webkit-flex; justify-content: center;">
+            <span id="Pagination" style=""></span>
+        </div>
+    </div>
+</div>
+<!-- 模态框示例（Modal） -->
+<!--新增-->
+<div class="modal fade" id="addMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    新增服务器
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" method='POST' id="service-add">
+<!--                    <div class="form-group">-->
+<!--                        <label for="id">ID</label>-->
+<!--                        <input  type="text" id="id" class="form-control" name="id" placeholder="请输入IP地址，如172.16.40.254" >-->
+<!--                    </div>-->
+                    <div class="form-group">
+                        <label for="ip">*IP地址</label>
+                        <input  type="text" id="ip" class="form-control" name="ip" placeholder="请输入IP地址，如172.16.40.254" >
+                    </div>
+                    <div class="form-group">
+                        <label for="project">*所属项目</label>
+                        <input type="text" id="project" class="form-control" name="project" placeholder="" >
+                    </div>
+                    <div class="form-group">
+                        <label for="status">*状态</label>
+                        <select id="status" class="form-control" name="status">
+                            <option value="1">在用</option>
+                            <option value="2">空闲</option>
+                            <option value="3">故障</option>
+                            <option value="4">已预订，待安装</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label  for="username">*用户名</label>
+                        <input  type="text" id="username" class="form-control" name="username" value="root" >
+                    </div>
+                    <div class="form-group">
+                        <label  for="password">*密码</label>
+                        <input  type="text" id="password" class="form-control" name="password" placeholder="请输入密码，如：root" >
+                    </div>
+                    <div class="form-group">
+                        <label for="role">角色</label>
+                        <input type="text" class="form-control" name="role" placeholder="角色" autocomplete="off" id="role">
+                    </div>
+                    <div class="form-group">
+                        <label for="system_version">系统版本</label>
+                        <input type="text" class="form-control" name="system_version" placeholder="系统版本" autocomplete="off" id="system_version">
+                    </div>
+                    <div>
+                        <label for="cpu">CPU</label>
+                        <input type="text" name="cpu" class="form-control" placeholder="cpu" autocomplete="off" id="cpu">
+                    </div>
+                    <div>
+                        <label for="memory">内存</label>
+                        <input type="text" name="memory" class="form-control" placeholder="memory" autocomplete="off" id="memory">
+                    </div>
+                    <div>
+                        <label for="disk">磁盘空间</label>
+                        <input type="text" name="disk" class="form-control" placeholder="disk" autocomplete="off" id="disk">
+                    </div>
+                    <div>
+                        <label for="remark">备注</label>
+                        <input type="text" name="remark" class="form-control" autocomplete="off" id="remark">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn layui-btn" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn layui-btn" onclick="add_service()">
+                            提交
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 编辑 -->
+<div class="modal fade" id="editMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    修改记账信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="service-edit">
+                    <div class="form-group" style="display: none">
+                        <label for="edit_id">id</label>
+                        <input type="text" id="edit_id" class="ipt form-control" name="id" placeholder="请输入id" >
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_ip">ip</label>
+                        <input type="text" id="edit_ip" class="ipt form-control" name="ip" placeholder="请输入ip" >
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_project">所属项目</label>
+                        <input type="text" id="edit_project" class="ipt form-control" name="project" placeholder="" >
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_status">状态</label>
+                        <select id="edit_status" class="ipt form-control" name="status">
+                            <option value="1">在用</option>
+                            <option value="2">空闲</option>
+                            <option value="3">故障</option>
+                            <option value="4">已预订，待安装</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_username">用户名</label>
+                        <input type="text" id="edit_username" class="ipt form-control" name="username" placeholder="请输入用户名，如：root" >
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_password">密码</label>
+                        <input type="text" id="edit_password" class="ipt form-control" name="password" placeholder="请输入密码，如：root" >
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_role">角色</label>
+                        <input type="text" class="ipt form-control" name="role" placeholder="角色" autocomplete="off" id="edit_role">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_system_version">系统版本</label>
+                        <input type="text" class="ipt form-control" name="system_version" placeholder="系统版本" autocomplete="off" id="edit_system_version">
+                    </div>
+                    <div>
+                        <label for="edit_cpu">CPU</label>
+                        <input type="text" name="cpu" class="ipt form-control" placeholder="cpu" autocomplete="off" id="edit_cpu">
+                    </div>
+                    <div>
+                        <label for="edit_memory">内存</label>
+                        <input type="text" name="memory" class="ipt form-control" placeholder="memory" autocomplete="off" id="edit_memory">
+                    </div>
+                    <div>
+                        <label for="edit_disk">磁盘空间</label>
+                        <input type="text" name="disk" class="ipt form-control" placeholder="disk" autocomplete="off" id="edit_disk">
+                    </div>
+                    <div>
+                        <label for="edit_remark">备注</label>
+                        <input type="text" name="remark" class="ipt form-control" autocomplete="off" id="edit_remark">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn layui-btn" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn layui-btn" onclick="edit_service()">
+                            提交
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--自动填充提示内容模态框-->
+<div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:400px">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h1 class="modal-title" id="tipModalLabel" style="font-size:18px;font-weight: bold;">
+                </h1>
+                <div class="modal-footer">
+                    <button type="button" class="btn layui-btn" data-dismiss="modal" aria-hidden="true" value="确认">
+                        确认
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body>
+<script type="text/javascript">
+
+    let statusArray = ['全部', '在用', '空闲', '故障', '已预订，待安装'] //解决前端字典转义问题
+
+    //点击全选按钮勾选子节点操作
+    function demo(){
+        let allcheck=document.getElementById("allcheck");
+        let choice=document.getElementsByName("choice");
+        for(let i=0;i<choice.length;i++){
+            choice[i].checked=allcheck.checked;
+        }
+    }
+    //点击子复选框,全选框 选中、取消
+    function setAll(){
+        if(!$(".checknum").checked){
+            $("#allcheck").prop("checked",false); // 子复选框某个不选择，全选也被取消
+        }
+        var choicelength=$("input[type='checkbox'][class='checknum']").length;
+        var choiceselect=$("input[type='checkbox'][class='checknum']:checked").length;
+
+        if(choicelength===choiceselect){
+            $("#allcheck").prop("checked",true);   // 子复选框全部部被选择，全选也被选择；1.对于HTML元素我们自己自定义的DOM属性，在处理时，使用attr方法；2.对于HTML元素本身就带有的固有属性，在处理时，使用prop方法。
+        }
+    }
+    $(function(){
+        edit();
+        add();
+        del();
+        check();
+        search(1);
+        // colorAdd();
+    });
+
+    //搜索条件重置按钮
+    function reset() {
+        $('#ip_search').val('');
+        $('#project_search').val('');
+        $('#status_search').val(0);
+        search(1);
+    }
+
+    //编辑
+    function edit(){
+        $("#btn2").click(function(){
+            $("#myAlert").css("display","none");
+            $("#myAlert1").css("display","none");
+            let count=0;
+            let env_value;
+            let env= [];
+            let elements=$(".ipt");
+            $("#table").find(":checkbox:checked.checknum").each(function(){
+                env_value=$(this).parent()
+                for (let i=0;i<elements.length;i++){
+                    env_value=env_value.next();
+                    env[i]=env_value.text();
+                }
+                env[3] = statusArray.map(item => item).indexOf(env[3]); //通过下拉框值返回索引值
+                count++;
+            });
+            if (count===1)
+            {
+                for (let i=0;i<env.length;i++){
+                    $(elements[i]).val(env[i]);
+                }
+                $('#editMyModal').modal("show");
+            }
+            else{
+                $("#myAlert").css("display","inherit");
+            }
+        });
+    }
+    //新增
+    function add(){
+        $("#btn1").click(function(){
+            $("#myAlert").css("display","none");
+            $("#myAlert1").css("display","none");
+        });
+    }
+    let checked_ids;
+
+    // 删除
+    function del(){
+        $("#btn3").click(function(){
+            //调整被勾选的值
+            change_checked_ids();
+            $("#myAlert").css("display","none");
+            $("#myAlert1").css("display","none");
+            $("#myAlert2").css("display","none");
+            if (checked_ids.length<1){
+                $("#myAlert1").css("display","inherit");
+                return false;
+            }
+            else{
+                $("#ipt1").val(checked_ids);
+            }
+            console.log(checked_ids);
+        });
+    }
+    //定义一个被选中的全局变量
+    checked_ids = [];
+    // checked_ids=checked_ids.split(",");
+    // 根据返回值去勾选对应列,如果全部勾选顺便把全选也勾上
+    function check(){
+        //alert (checked_ids);
+        //当前页的列id
+        $("#table").find(":checkbox.checknum").each(function(){
+            let check_id=$(this).parent().next().text();
+            if (check_id !== "") {
+                //check_ids.push(check_id);
+                //alert(check_id);
+                if (checked_ids.includes(String(check_id))){
+                    $(this).attr("checked", true);
+                }
+            }
+        });
+        //全选
+        setAll();
+    }
+
+    //根据当前页的勾选变化改变checked_ids值
+    function change_checked_ids(){
+        //当前页的列id
+        $("#table").find(":checkbox.checknum").each(function(){
+            let check_id=$(this).parent().next().text();
+            if (check_id !== "") {
+                //选中则判断数组是否存在，不存在则入栈
+                if ($(this).is(":checked")){
+                    if (!checked_ids.includes(String(check_id))){
+                        checked_ids.push(String(check_id));
+                    }
+                }
+                //未选中则判断数组是否存在，存在则出栈
+                else{
+                    if (checked_ids.includes(String(check_id))){
+                        checked_ids = $.grep(checked_ids, function(value) {
+                            return value !== String(check_id);
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    // 服务器添加功能
+    function add_service(){
+        let data = $("#service-add").serializeJSON();
+        console.log('服务器添加获取数据：' + data);
+        $.ajax({
+            url: "/service/add",
+            data: JSON.stringify(data),
+            type: "post",
+            async : false,
+            dataType: "json",
+            contentType : 'application/json;charset=UTF-8',
+            success:function (data) {
+                if (data.code === "0") {
+                    layer.msg(data.msg, {icon: 6, time: 1000}, function () {
+                        window.location.reload();
+                    });
+                } else if (data.code !== "0") {
+                    layer.msg(data.msg, {icon: 5, time: 1000});
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    // 编辑服务器信息
+    function edit_service() {
+        let data = $("#service-edit").serializeJSON();
+        console.log(data);
+        $.ajax({
+            url: "/service/update" + "/" + data.id,
+            data: JSON.stringify(data),
+            type: "put",
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            success:function (data) {
+                if (data.code === "0") {
+                    layer.msg(data.msg, {icon: 6, time: 1000}, function () {
+                        layer.close(layer.index);
+                    });
+                } else if (data.code !== "0") {
+                    layer.msg(data.msg, {icon: 5, time: 1000});
+                }
+                $('#editMyModal').modal("hide");
+                window.location.reload();
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    //删除服务器信息
+    function delete_record() {
+        layer.confirm('确认要删除吗？', function (index) {
+            // chencdcheck_ids = [,'20200212002', '20200212001']
+            if (checked_ids.length === 1){   //当只勾选一条记录的时候，调用单个删除接口
+                $.ajax({
+                    url: "/service/delete" + "/" + checked_ids[0] + "/",
+                    type: 'DELETE',
+                    success: function (data) {
+                        if (data.code === "0") {
+                            layer.msg(data.msg, {icon: 6, time: 1000}, function () {
+                                window.location.reload();
+                            });
+                        } else if (data.code !== "0") {
+                            layer.msg(data.msg, {icon: 5, time: 1000});
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            } else if (checked_ids.length > 1){  //当勾选多条记录的时候，进行批量删除操作，调用批量删除接口
+                let data = {"ids": checked_ids.toString()};
+                console.log(data);
+                $.ajax({
+                    url: "/service/delete",
+                    type: 'DELETE',
+                    data: data,
+                    success: function (data) {
+                        if (data.code === "0") {
+                            layer.msg(data.msg, {icon: 6, time: 1000}, function () {
+                                window.location.reload();
+                            });
+                        } else if (data.code !== "0") {
+                            layer.msg(data.msg, {icon: 5, time: 1000});
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+        });
+    }
+    //初始化数据，服务器
+    function initData(data) {
+        if (data.data.length === 0) {
+            $("#data-body").append("<tr><td colspan='8' style='text-align:center; font-size:16px;' class='text-center'>暂无数据</td></tr>");
+        } else {
+            let results = data.data.list;
+
+            page = data.data.page;
+            size = data.data.size;
+            total = data.data.total;
+
+
+            console.log(results);
+            for (let i = 0; i < results.length; i++) {
+                let result = results[i];
+                let tr=$('<tr></tr>');
+                tr.append('<td id="che1" ><input type="checkbox" name="choice" class="checknum"  onclick="setAll()"/></td>');
+                tr.append('<td style="display: none">'+result.id+'</td>'+
+                    '<td>'+result.ip+'</td>'+
+                    '<td>'+result.project+'</td>'+
+                    '<td class="status-color" style="" title="' + result.remark + '">'+ statusArray[result.status]+'</td>'+
+                    '<td>'+result.username+'</td>'+
+                    '<td>'+result.password+'</td>'+
+                    '<td>'+result.role+'</td>'+
+                    '<td>'+result.system_version+'</td>'+
+                    '<td>'+result.cpu+'</td>'+
+                    '<td>'+result.memory+'</td>'+
+                    '<td>'+result.disk+'</td>'+
+                    '<td style="display: none">'+result.remark+'</td>');
+                $("#data-body").append(tr);
+                //根据服务器状态添加背景色
+                $(".status-color").each(function(index, el){
+                    let str = $(el).text();
+                    console.log(str);
+                    if ("故障" === str){
+                        $(el).css("background", "#ee072b");
+                    }
+                    if ("在用" === str){
+                        $(el).css("background", "#55964d");
+                    }
+                    if ("空闲" === str){
+                        $(el).css("background", "#305be5");
+                    }
+                })
+            }
+        }
+    }
+    // 筛选和列表页数据请求及分页
+    function search(page) {
+        let ip = $("#ip_search").val();
+        let project = $("#project_search").val();
+        let status = $("#status_search").val();
+        let size = $("#pageSize").val();
+
+        $("#data-body").html("");
+        $.ajax({
+            type: "GET",
+            url: "/service/list",
+            async: false,
+            data: {"ip": ip, "project": project, "status": status, "size": size, "page": page},
+            datatype: "json",
+            success: function (data) {
+                console.log(data);
+                initData(data);
+                layui.use(['laypage', 'layer'], function () {
+                    var laypage = layui.laypage;
+                    laypage.render({
+                        elem: 'Pagination',//分页容器的id
+                        count: total, //总记录条数
+                        // pages: data.data.total_page,//总页数
+                        skip: true, //是否开启跳页
+                        limit: size,
+                        curr: page, //当前页
+                        skin: '#5A98DE',  //当前页的颜色
+                        first: '首页',
+                        last: '尾页',
+                        layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+                        jump: function (obj, first) {
+                            //首次不执行
+                            if (!first) {
+                                search(obj.curr);
+                            }
+                        }
+                    })
+                })
+            },
+            error: function (data) {
+            }
+        });
+    }
+    //导出操作
+    function record_export() {
+        window.location.href = '/service/export'
+    }
+</script>
+</html>

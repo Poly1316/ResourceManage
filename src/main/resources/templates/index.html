@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+
+    <link href="/css/fh-ui.min.css" rel="stylesheet">
+    <script src="/js/fh-ui.min.js"></script>
+
+</head>
+
+<body>
+<div class="searchbox large">
+    <span>搜索</span>
+    <input placeholder="请输入搜索内容"/>
+    <span class="aidicon aidicon-close"></span>
+</div>
+<br>
+
+</body>
+<script>
+    $('.searchbox .aidicon-close').on('mousedown',function(){
+        $(this).siblings('input').val('');
+    })
+    $('.searchbox-mini .aidicon-close').on('mousedown',function(e){
+        e.preventDefault();
+        $(this).siblings('input').val('');
+    })
+</script>
+</html>

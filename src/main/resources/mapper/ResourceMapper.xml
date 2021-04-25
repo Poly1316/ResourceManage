@@ -37,7 +37,7 @@
   </select>
 
   <select id="getMaxId" resultType="Long">
-    SELECT max(id)+1 FROM service
+    SELECT IF(max(id) is null,0,max(id))+1 FROM test.service
   </select>
 
   <select id="getTotal" resultType="Long">

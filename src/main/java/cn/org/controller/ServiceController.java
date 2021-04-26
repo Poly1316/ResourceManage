@@ -42,7 +42,7 @@ public class ServiceController {
         Optional<Pager<Service>> optionalPager = serviceService.getAll(ip, project, status, page, size);
 
         if (optionalPager.isPresent()) {
-            jsonResult.setCode("0");
+            jsonResult.setCode(JsonResult.SUCCESS);
             jsonResult.setData(optionalPager.get());
         }
         logger.info("后台查询返回结果为：" + jsonResult.toString());
@@ -87,7 +87,7 @@ public class ServiceController {
         JsonResult jsonResult = new JsonResult<>();
         logger.info("待删除的服务器id为：" + id);
         serviceService.delService(id);
-        jsonResult.setCode("0");
+        jsonResult.setCode(JsonResult.SUCCESS);
         jsonResult.setMsg("删除成功！");
         return jsonResult;
     }
@@ -103,10 +103,10 @@ public class ServiceController {
         logger.info("待删除的服务器id为：" + Arrays.toString(ids));
         if (ids != null && ids.length !=0) {
             serviceService.delMoreServiceById(ids);
-            jsonResult.setCode("0");
+            jsonResult.setCode(JsonResult.SUCCESS);
             jsonResult.setMsg("删除成功！");
         } else {
-            jsonResult.setCode("1");
+            jsonResult.setCode(JsonResult.ERROR);
             jsonResult.setMsg("删除失败！");
         }
 

@@ -403,11 +403,11 @@
             dataType: "json",
             contentType : 'application/json;charset=UTF-8',
             success:function (data) {
-                if (data.code === "0") {
+                if (data.code === 200) {
                     layer.msg(data.msg, {icon: 6, time: 1000}, function () {
                         window.location.reload();
                     });
-                } else if (data.code !== "0") {
+                } else if (data.code !== 200) {
                     layer.msg(data.msg, {icon: 5, time: 1000});
                 }
             },
@@ -428,11 +428,11 @@
             dataType: "json",
             contentType: "application/json;charset=UTF-8",
             success:function (data) {
-                if (data.code === "0") {
+                if (data.code === 200) {
                     layer.msg(data.msg, {icon: 6, time: 1000}, function () {
                         layer.close(layer.index);
                     });
-                } else if (data.code !== "0") {
+                } else if (data.code !== 200) {
                     layer.msg(data.msg, {icon: 5, time: 1000});
                 }
                 $('#editMyModal').modal("hide");
@@ -452,11 +452,11 @@
                     url: "/service/delete" + "/" + checked_ids[0] + "/",
                     type: 'DELETE',
                     success: function (data) {
-                        if (data.code === "0") {
+                        if (data.code === 200) {
                             layer.msg(data.msg, {icon: 6, time: 1000}, function () {
                                 window.location.reload();
                             });
-                        } else if (data.code !== "0") {
+                        } else if (data.code !== 200) {
                             layer.msg(data.msg, {icon: 5, time: 1000});
                         }
                     },

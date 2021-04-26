@@ -1,15 +1,19 @@
 package cn.org.entity;
 
 public class JsonResult<T> {
+
+    public static final int SUCCESS=200;
+    public static final int ERROR=201;
+
     private T data;
-    private String code;
+    private int code;
     private String msg;
 
     /**
      * 若没有数据返回，默认状态码为0，提示信心为：操作成功！
      */
     public JsonResult() {
-        this.code = "0";
+        this.code = SUCCESS;
         this.msg = "操作成功!";
     }
 
@@ -18,7 +22,7 @@ public class JsonResult<T> {
      * @param code
      * @param msg
      */
-    public JsonResult(String code, String msg) {
+    public JsonResult(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
@@ -29,7 +33,7 @@ public class JsonResult<T> {
      */
     public JsonResult(T data) {
         this.data = data;
-        this.code = "0";
+        this.code = SUCCESS;
         this.msg = "操作成功！";
     }
 
@@ -40,11 +44,11 @@ public class JsonResult<T> {
      */
     public JsonResult(T data, String msg) {
         this.data = data;
-        this.code = "0";
+        this.code = SUCCESS;
         this.msg = msg;
     }
 
-    public JsonResult(T data, String code, String msg) {
+    public JsonResult(T data, int code, String msg) {
         this.data = data;
         this.code = code;
         this.msg = msg;
@@ -58,11 +62,11 @@ public class JsonResult<T> {
         this.data = data;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

@@ -36,6 +36,11 @@ public class ServiceServiceImpl implements ServiceService {
                 size = 10;
             }
 
+            //默认页码为1
+            if (page == null){
+                page =1;
+            }
+
             List<Service> services = serviceMapper.getAll(ip, project, status, (page - 1) * size, size);
 
             pager.setPage(page);

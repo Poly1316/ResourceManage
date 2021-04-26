@@ -1,4 +1,4 @@
-package cn.org.entity;
+package wang.polyblog.resourcemanager.entity;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

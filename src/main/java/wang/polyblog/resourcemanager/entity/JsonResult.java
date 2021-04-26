@@ -1,4 +1,4 @@
-package cn.org.entity;
+package wang.polyblog.resourcemanager.entity;
 
 public class JsonResult<T> {
 

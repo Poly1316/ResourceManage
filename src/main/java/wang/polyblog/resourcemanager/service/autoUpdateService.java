@@ -1,19 +1,17 @@
-package cn.org.service;
+package wang.polyblog.resourcemanager.service;
 
-import cn.org.entity.Service;
-import cn.org.utils.RemoteCommandUtil;
+import wang.polyblog.resourcemanager.entity.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-import static cn.org.utils.RemoteCommandUtil.execute;
-import static cn.org.utils.RemoteCommandUtil.login;
+import static wang.polyblog.resourcemanager.utils.RemoteCommandUtil.execute;
+import static wang.polyblog.resourcemanager.utils.RemoteCommandUtil.login;
 
 @Component
 @EnableScheduling

@@ -1,6 +1,6 @@
-package cn.org.dao;
+package wang.polyblog.resourcemanager.dao;
 
-import cn.org.entity.Service;
+import wang.polyblog.resourcemanager.entity.Service;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

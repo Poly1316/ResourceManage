@@ -1,9 +1,9 @@
-package cn.org.service.impl;
+package wang.polyblog.resourcemanager.service.impl;
 
-import cn.org.dao.ServiceMapper;
-import cn.org.entity.Pager;
-import cn.org.entity.Service;
-import cn.org.service.ServiceService;
+import wang.polyblog.resourcemanager.dao.ServiceMapper;
+import wang.polyblog.resourcemanager.entity.Pager;
+import wang.polyblog.resourcemanager.entity.Service;
+import wang.polyblog.resourcemanager.service.ServiceService;
 
 import javax.annotation.Resource;
 import java.util.List;

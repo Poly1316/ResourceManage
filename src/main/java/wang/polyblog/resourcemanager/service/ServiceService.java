@@ -1,8 +1,7 @@
-package cn.org.service;
+package wang.polyblog.resourcemanager.service;
 
-import cn.org.entity.Pager;
-import cn.org.entity.Service;
-import org.apache.ibatis.annotations.Param;
+import wang.polyblog.resourcemanager.entity.Pager;
+import wang.polyblog.resourcemanager.entity.Service;
 
 import java.util.List;
 import java.util.Optional;

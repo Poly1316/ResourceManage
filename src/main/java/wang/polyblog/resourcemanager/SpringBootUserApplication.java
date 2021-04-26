@@ -1,11 +1,9 @@
-package cn.org;
+package wang.polyblog.resourcemanager;
 
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,6 +24,6 @@ public class SpringBootUserApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(cn.org.SpringBootUserApplication.class,args);
+        SpringApplication.run(SpringBootUserApplication.class,args);
     }
 }

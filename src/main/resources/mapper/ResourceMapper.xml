@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.org.dao.ServiceMapper">
-  <resultMap id="BaseResultMap" type="cn.org.entity.Service">
+<mapper namespace="wang.polyblog.resourcemanager.dao.ServiceMapper">
+  <resultMap id="BaseResultMap" type="wang.polyblog.resourcemanager.entity.Service">
     <id column="id" property="id" />
     <result column="ip" property="ip" />
     <result column="project" property="project" />

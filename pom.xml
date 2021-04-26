@@ -97,6 +97,16 @@
       <artifactId>commons-collections4</artifactId>
       <version>4.1</version>
     </dependency>
+    <!--单元测试依赖-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.6.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
   </dependencies>
   <!--spring 打包成war包-->
   <build>

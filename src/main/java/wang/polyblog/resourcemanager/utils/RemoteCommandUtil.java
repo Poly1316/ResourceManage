@@ -1,9 +1,8 @@
-package cn.org.utils;
+package wang.polyblog.resourcemanager.utils;
 
 import ch.ethz.ssh2.Session;
 import ch.ethz.ssh2.StreamGobbler;
-import cn.org.entity.Service;
-import cn.org.service.ServiceService;
+import wang.polyblog.resourcemanager.service.ServiceService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import ch.ethz.ssh2.Connection;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.util.List;
 
 public class RemoteCommandUtil {
 

@@ -1,4 +1,4 @@
-package cn.org.utils;
+package wang.polyblog.resourcemanager.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.org.entity.ExcelColumn;
+import wang.polyblog.resourcemanager.entity.ExcelColumn;
 
 public class ExcelUtils {
 

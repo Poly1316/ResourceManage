@@ -156,4 +156,11 @@ public class Service implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    @Override
+    public String toString(){
+        return "id:" + id + ";ip:" + ip + ";project:" + project + ";status:" + status + ";username:" + username +
+                ";password:" + password + ";role:" + role + ";system_version:" + system_version + ";cpu:" + cpu +
+                ";memory:" + memory + ";disk:" + disk + ";remark:" + remark;
+    }
 }

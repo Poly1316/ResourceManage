@@ -45,7 +45,7 @@ public class ServiceController {
             jsonResult.setCode("0");
             jsonResult.setData(optionalPager.get());
         }
-        logger.info("后台查询返回结果为：" + jsonResult);
+        logger.info("后台查询返回结果为：" + jsonResult.toString());
         return jsonResult;
     }
 

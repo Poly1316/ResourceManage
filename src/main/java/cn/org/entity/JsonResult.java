@@ -73,4 +73,12 @@ public class JsonResult<T> {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    /*
+    重写实体类toString()方法，方便输出到日志
+     */
+    @Override
+    public String toString() {
+        return "JsonResult [code=" + this.code + ", msg=" + this.msg + ", data=" + this.data.toString() + "]";
+    }
 }

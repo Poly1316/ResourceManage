@@ -58,4 +58,10 @@ public class Pager<T> {
     public void setList(List<T> list) {
         this.list = list;
     }
+
+    @Override
+    public String toString() {
+        return "{page:" + this.page + ",size:" + this.size + ",total:" + this.total + ",total_page:" + this.page +
+                ",list:" + this.list.toString() + "}";
+    }
 }

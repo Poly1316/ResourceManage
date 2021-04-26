@@ -25,6 +25,7 @@ class ServiceControllerTest extends BaseSpringBootTest {
     @Autowired
     private ServiceController serviceController;
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Before

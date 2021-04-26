@@ -1,3 +1,4 @@
 2021-04 V1.0
 1.已完成服务器管理列表、增删改查、导出功能。 --2021/4/25
 2.将项目包名由cn.org修改为wang.polyblog.resourcemanager。 --2021/4/26
+3.MockMvc方法上添加Autowired注解以及单元测试基类添加AutoConfigureMockMvc解决单元测试空指针的问题。 --2021/4/26

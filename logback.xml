@@ -34,7 +34,7 @@
         </encoder>
     </appender>
     <!-- project default level -->
-    <logger name="cn.org" level="DEBUG" />
+    <logger name="wang.polyblog.resourcemanager" level="DEBUG" />
 
     <!-- 日志输出级别 -->
     <root level="DEBUG">

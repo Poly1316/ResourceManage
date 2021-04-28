@@ -57,9 +57,14 @@ public class ServiceController {
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     public JsonResult<Service> addService(@RequestBody Service service) {
         logger.info("服务器新增接口/service/add接收到传入的参数为：" + service.toString());
-        Long id = serviceService.getMaxId();
-        logger.info("本次新增生成的ID为：" + id);
-        service.setId(id);
+
+        //若传回后端的数据id字段为null，则自动获取设置id为max(id)+1
+        if (service.getId() == null) {
+            Long id = serviceService.getMaxId();
+            logger.info("本次新增生成的ID为：" + id);
+            service.setId(id);
+        }
+
         serviceService.addService(service);
         return new JsonResult();
     }

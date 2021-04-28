@@ -7,8 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +23,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  * @version: 1.0
  */
 @RunWith(SpringRunner.class)
+@TestPropertySource("classpath:application.properties") //读取项目配置文件
 @SpringBootTest
 @WebAppConfiguration
 @AutoConfigureMockMvc
@@ -28,7 +32,7 @@ public abstract class BaseSpringBootTest {
     protected Logger logger = LoggerFactory.getLogger(BaseSpringBootTest.class);
 
     @Before
-    public void init() {
+    public void setup() throws IOException {
         logger.info("开始测试...");
     }
 

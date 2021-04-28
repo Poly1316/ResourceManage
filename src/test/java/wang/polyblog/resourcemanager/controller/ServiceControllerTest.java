@@ -271,20 +271,16 @@ class ServiceControllerTest extends BaseSpringBootTest {
         Mockito.verifyNoMoreInteractions(serviceService);
     }
 
+    /*
+    批量删除接口正向用例——传入参数[4,1000]
+     */
     @Test
     void delMoreService() throws Exception {
-        doNothing().when(serviceService).delMoreServiceById(anyInt());
-        List<Integer> ids = new ArrayList<>();
-        HashMap<String, List<Integer>> idMap = new HashMap<>();
-        JSONObject jsonIDs = new JSONObject();
-        ids.add(4);
-        ids.add(1000);
-        jsonIDs.put("ids", ids);   //{ids:[4,1000]}
-        idMap.put("ids", ids);
-        logger.info("delMoreService构造的参数为：" + jsonIDs.toString() + jsonIDs.toJSONString());
+        doNothing().when(serviceService).delMoreServiceById(any());
+        String[] ids = new String[]{"4", "1000"};
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/service/delete")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("ids", ids.toString()))
+                .param("ids", ids))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         //解决控制台打印body中文乱码的问题
@@ -292,7 +288,7 @@ class ServiceControllerTest extends BaseSpringBootTest {
         response.setCharacterEncoding("UTF-8");
         resultActions.andDo(MockMvcResultHandlers.print());
         logger.info(response.getContentAsString());
-        Mockito.verify(serviceService).delService(anyLong());
+        Mockito.verify(serviceService).delMoreServiceById(any());
         Mockito.verifyNoMoreInteractions(serviceService);
     }
 }

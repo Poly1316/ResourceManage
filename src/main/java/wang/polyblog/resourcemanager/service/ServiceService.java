@@ -17,7 +17,7 @@ public interface ServiceService {
 
     void updateService(Long id, Service service);
 
-    void delMoreServiceById(Integer... ids);
+    void delMoreServiceById(String[] ids);
 
     Long getMaxId(); //获取service表最大id，在添加service信息的时候需要
 }

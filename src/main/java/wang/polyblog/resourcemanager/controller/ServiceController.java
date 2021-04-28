@@ -1,5 +1,6 @@
 package wang.polyblog.resourcemanager.controller;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import wang.polyblog.resourcemanager.entity.JsonResult;
 import wang.polyblog.resourcemanager.entity.Pager;
 import wang.polyblog.resourcemanager.entity.Service;
@@ -102,10 +103,11 @@ public class ServiceController {
      * @return 返回删除成功后失败信息
      */
     @RequestMapping(value = "/delete", method = {RequestMethod.DELETE})
-    public JsonResult delMoreService(Integer... ids) {
+    public JsonResult delMoreService(String[] ids) {
         JsonResult jsonResult = new JsonResult<>();
-        logger.info("待删除的服务器id为：" + Arrays.toString(ids));
-        if (ids != null && ids.length !=0) {
+        Integer[] newIds = (Integer[]) ConvertUtils.convert(ids,Integer.class);
+        logger.info("待删除的服务器id为：" + Arrays.toString(newIds));
+        if (newIds != null && newIds.length !=0) {
             serviceService.delMoreServiceById(ids);
             jsonResult.setCode(JsonResult.SUCCESS);
             jsonResult.setMsg("删除成功！");

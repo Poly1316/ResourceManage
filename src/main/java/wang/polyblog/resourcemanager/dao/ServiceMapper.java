@@ -36,7 +36,7 @@ public interface ServiceMapper {
 
     void delService(Long id);
 
-    void delMoreServiceById(@Param("ids")Integer... ids);   //...表示是可变个数参数
+    void delMoreServiceById(@Param("ids")String[] ids);   //...表示是可变个数参数
 
     void updateService(Service service);
 }

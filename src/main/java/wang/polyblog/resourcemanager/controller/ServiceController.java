@@ -119,6 +119,7 @@ public class ServiceController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     public void exportServiceExcel(HttpServletResponse response) {
         List<Service> serviceList = serviceService.exportAll();
+        logger.info("获取到的待导出服务器list为：" + serviceList.toString());
         List<Service> resultList = new ArrayList<Service>();
         String[] statusList = new String[] {
                 "全部", "在用", "空闲", "故障", "已预订，待安装"

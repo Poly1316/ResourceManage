@@ -113,19 +113,48 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <!--jacoco代码覆盖率统计-->
     <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.8.3</version>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.8.2</version>
     </dependency>
   </dependencies>
   <!--spring 打包成war包-->
   <build>
     <finalName>ResourceManage</finalName>
     <plugins>
+      <!--创建可执行的jar包-->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.3.0.RELEASE</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.2</version>
+        <configuration>
+          <destFile>target/coverage-reports/jacoco-unit.exec</destFile>
+          <dataFile>target/coverage-reports/jacoco-unit.exec</dataFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jacoco-initialize</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <!--这个report:对代码进行检测，然后生成index.html在 target/site/index.html中可以查看检测的详细结果-->
+          <execution>
+            <id>jacoco-site</id>
+            <phase>package</phase>
+            <!--<phase>test</phase>写上test的时候会自动出现site文件夹，而不需执行下面的jacoco:report步骤，推荐-->
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

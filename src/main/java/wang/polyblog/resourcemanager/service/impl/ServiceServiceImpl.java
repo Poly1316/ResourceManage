@@ -1,6 +1,5 @@
 package wang.polyblog.resourcemanager.service.impl;
 
-import org.apache.commons.beanutils.ConvertUtils;
 import wang.polyblog.resourcemanager.dao.ServiceMapper;
 import wang.polyblog.resourcemanager.entity.Pager;
 import wang.polyblog.resourcemanager.entity.Service;
@@ -78,9 +77,8 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void delMoreServiceById(String[] ids) {
-        Integer[] newIds = (Integer[]) ConvertUtils.convert(ids,Integer.class);
         //判断参数是否合法
-        if (newIds == null || newIds.length == 0) {
+        if (ids == null || ids.length == 0) {
             throw new IllegalArgumentException("请至少选择一条数据");
         }
 

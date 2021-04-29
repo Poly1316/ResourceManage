@@ -239,6 +239,7 @@ class ServiceControllerTest extends BaseSpringBootTest {
      */
     @Test
     void exportServiceExcel() throws Exception {
+        doNothing().when(serviceService).exportAll();
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/service/export"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().contentType("application/octet-stream"));
@@ -247,6 +248,8 @@ class ServiceControllerTest extends BaseSpringBootTest {
         response.setCharacterEncoding("UTF-8");
         resultActions.andDo(MockMvcResultHandlers.print());
         logger.info(response.getContentAsString());
+        Mockito.verify(serviceService).exportAll();
+        Mockito.verifyNoMoreInteractions(serviceService);
     }
 
     /*

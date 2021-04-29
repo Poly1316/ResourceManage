@@ -1,11 +1,7 @@
 package wang.polyblog.resourcemanager.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Before;
-
-import java.lang.reflect.Array;
 import java.util.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,9 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -27,11 +21,6 @@ import wang.polyblog.resourcemanager.BaseSpringBootTest;
 import wang.polyblog.resourcemanager.entity.Pager;
 import wang.polyblog.resourcemanager.entity.Service;
 import wang.polyblog.resourcemanager.service.ServiceService;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -170,6 +159,7 @@ class ServiceControllerTest extends BaseSpringBootTest {
     @Test
     void addServiceNoId() throws Exception {
         doNothing().when(serviceService).addService(Mockito.any(Service.class));    //mock addService方法，doNothing
+        Mockito.when(serviceService.getMaxId()).thenReturn(1L);
         Service serviceParams = new Service();
         serviceParams.setIp("172.16.40.189");
         serviceParams.setProject("单元测试");
@@ -197,6 +187,7 @@ class ServiceControllerTest extends BaseSpringBootTest {
         logger.info(response.getContentAsString());
         //验证addService方法被调用过
         Mockito.verify(serviceService).addService(Mockito.any(Service.class));
+        Mockito.verify(serviceService).getMaxId();
         //保证这个测试用例中所有被Mock的对象的相关方法都已经被Verify过了
         Mockito.verifyNoMoreInteractions(serviceService);
     }
@@ -206,6 +197,7 @@ class ServiceControllerTest extends BaseSpringBootTest {
      */
     @Test
     void updateService() throws Exception {
+        doNothing().when(serviceService).updateService(anyLong(), Mockito.any(Service.class));
         Service serviceParams = new Service();
         serviceParams.setIp("172.16.40.190");
         serviceParams.setProject("更新接口单元测试");
@@ -232,6 +224,8 @@ class ServiceControllerTest extends BaseSpringBootTest {
         response.setCharacterEncoding("UTF-8");
         resultActions.andDo(MockMvcResultHandlers.print());
         logger.info(response.getContentAsString());
+        Mockito.verify(serviceService).updateService(anyLong(), Mockito.any(Service.class));
+        Mockito.verifyNoMoreInteractions(serviceService);
     }
 
     /*
@@ -239,7 +233,23 @@ class ServiceControllerTest extends BaseSpringBootTest {
      */
     @Test
     void exportServiceExcel() throws Exception {
-        doNothing().when(serviceService).exportAll();
+        Service serviceList = new Service();
+        List<Service> exportList = new ArrayList<>();
+        serviceList.setId(9999L);
+        serviceList.setIp("172.16.40.190");
+        serviceList.setProject("export单元测试");
+        serviceList.setStatus("1");
+        serviceList.setUsername("root1");
+        serviceList.setPassword("password1");
+        serviceList.setRole("export单元测试角色");
+        serviceList.setSystem_version("export-Centos 6.7");
+        serviceList.setCpu("export-Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz");
+        serviceList.setMemory("export-2.0G");
+        serviceList.setDisk("export-/dev/vda:40GiB");
+        serviceList.setRemark("export-导出功能单元测试正常用例");
+        exportList.add(serviceList);
+        logger.info("单元测试/service/export接口构造的Mock数据为：" + exportList.toString());
+        Mockito.when(serviceService.exportAll()).thenReturn(exportList);
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/service/export"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().contentType("application/octet-stream"));

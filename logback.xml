@@ -6,7 +6,7 @@
     <property name="File_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 
     <!-- 定义日志存储的路径，不要配置相对路径 -->
-    <property name="FILE_PATH" value="D:/logs/springboot/resourceManage.%d{yyyy-MM-dd}.%i.log" />
+    <property name="FILE_PATH" value="./logs/resourceManage.%d{yyyy-MM-dd}.%i.log" />
 
     <!-- 控制台输出日志 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

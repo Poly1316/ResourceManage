@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ServiceIndexController {
     @RequestMapping("/index")
     public String serviceIndex() {
-        return "/resourceManage";
+        return "resourceManage";
     }
 }
